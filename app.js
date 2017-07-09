@@ -132,23 +132,27 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
         }, 
         function(err, resp, body) {
             console.log("success");
-             console.log(company_name.entity);
+            console.log(company_name.entity);
             console.log(body.aggregations[2].results[0].key);
-            console.log("Positive " + body.aggregations[4].results[0].matching_results);
-            console.log("Negative " + body.aggregations[4].results[1].matching_results);
+            console.log("higher " + body.aggregations[4].results[0].matching_results);
+            console.log("lower " + body.aggregations[4].results[1].matching_results);
             console.log("Neutral " + body.aggregations[4].results[2].matching_results);
-            var positive = body.aggregations[4].results[0].matching_results;
-            var negative = body.aggregations[4].results[1].matching_results;
+            var higher = body.aggregations[4].results[0].matching_results;
+            var lower = body.aggregations[4].results[1].matching_results;
             var neutral = body.aggregations[4].results[2].matching_results;
-            var total = positive + negative + neutral;
-            var positivepert = math.round(positive/total*100).toFixed(2);
-            var negativepert = math.round(negative/total*100).toFixed(2);
-            console.log("Positive Sentiment Percentage is " + positivepert + "%");
-            console.log("Negative Sentiment Percentage is " + negativepert + "%");
-            if (positivepert > 50) {
-                session.send(company_name.entity + ' is doing quite well! '+ positivepert + "% of the internet comments are positive!"), session.message.text;
+            var total = higher + lower + neutral;
+            var neupert = math.round(neutral/total*100).toFixed(2);
+            var higherpert = math.round(higher/total*100).toFixed(2);
+            var lowerpert = math.round(lower/total*100).toFixed(2);
+            console.log("higher Sentiment Percentage is " + higherpert + "%");
+            console.log("lower Sentiment Percentage is " + lowerpert + "%");
+            console.log(JSON.stringify(body));
+            if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
+                session.send(company_name.entity + ' is doing quite well! '+ higherpert + "% of the internet comments are positive!"), session.message.text;
+            } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
+                session.send(company_name.entity + ' is not doing really well. '+ higherpert + "% of the internet comments are negative!"), session.message.text;
             } else {
-                session.send(company_name.entity + ' is not doing really well. '+ negativepert + "% of the internet comments are negative!"), session.message.text;
+                session.send("The market towards "+company_name.entity + ' is quite neutral. '+ neupert + "% of the internet comments are negative!"), session.message.text;
             }
             // var trimcom = "";
             // trimcom = company_name;

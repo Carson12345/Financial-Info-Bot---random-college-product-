@@ -145,7 +145,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
             var negativepert = math.round(negative/total*100).toFixed(2);
             console.log("Positive Sentiment Percentage is " + positivepert + "%");
             console.log("Negative Sentiment Percentage is " + negativepert + "%");
-            if (positivepert > 0.5) {
+            if (positivepert > 50) {
                 session.send(company_name.entity + ' is doing quite well! '+ positivepert + "% of the internet comments are positive!"), session.message.text;
             } else {
                 session.send(company_name.entity + ' is not doing really well. '+ negativepert + "% of the internet comments are negative!"), session.message.text;

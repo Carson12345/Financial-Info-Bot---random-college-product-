@@ -146,7 +146,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
             var lowerpert = math.round(lower/total*100).toFixed(2);
             console.log("higher Sentiment Percentage is " + higherpert + "%");
             console.log("lower Sentiment Percentage is " + lowerpert + "%");
-            console.log(JSON.stringify(body));
+            // console.log(JSON.stringify(body));
             if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
                 session.send(company_name.entity + ' is doing quite well! '+ higherpert + "% of the internet comments are positive!"), session.message.text;
             } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {

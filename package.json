@@ -1,0 +1,32 @@
+{
+  "name": "eagle_bot_server",
+  "version": "1.0.0",
+  "description": "eagle ai market analyst",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Carson12345/Eagle_bot_Server.git"
+  },
+  "author": "Carson Yau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Carson12345/Eagle_bot_Server/issues"
+  },
+  "homepage": "https://github.com/Carson12345/Eagle_bot_Server#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "connect": "^3.6.2",
+    "dotenv-extended": "^2.0.1",
+    "ejs": "^2.5.6",
+    "mathjs": "^3.14.2",
+    "mssql": "^4.0.4",
+    "path": "^0.12.7",
+    "request": "^2.81.0",
+    "request-ip": "^2.0.2",
+    "valid-url": "^1.0.9"
+  }
+}

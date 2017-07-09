@@ -109,14 +109,14 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
     .matches('search', [
         function (session, args, next) 
             {
-        var startperiod = req.body.startperiod.replace(/-/g, '');
-        var endperiod = req.body.endperiod.replace(/-/g, '');
-        console.log(req.body);
-        console.log(startperiod);
-        console.log(endperiod);
+        // var startperiod = req.body.startperiod.replace(/-/g, '');
+        // var endperiod = req.body.endperiod.replace(/-/g, '');
+        // console.log(req.body);
+        // console.log(startperiod);
+        // console.log(endperiod);
         var company_name = builder.EntityRecognizer.findEntity(args.entities, 'company');
         var myJSONObject = {
-            "date":{"from": "20170105","to": "20170505"},
+            "date":{"from": "20170105","to": "20170705"},
             //"date":{"from": startperiod, "to": endperiod},
             "restrictedDateRange": "false",
             "text": company_name.entity
@@ -132,6 +132,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
         }, 
         function(err, resp, body) {
             console.log("success");
+             console.log(company_name.entity);
             console.log(body.aggregations[2].results[0].key);
             console.log("Positive " + body.aggregations[4].results[0].matching_results);
             console.log("Negative " + body.aggregations[4].results[1].matching_results);
@@ -144,11 +145,12 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
             var negativepert = math.round(negative/total*100).toFixed(2);
             console.log("Positive Sentiment Percentage is " + positivepert + "%");
             console.log("Negative Sentiment Percentage is " + negativepert + "%");
-            var trimcom = "";
-            trimcom = req.body.company;
-            trimcom = trimcom.replace(/ +/g, "");
-            console.log(trimcom);
+            // var trimcom = "";
+            // trimcom = company_name;
+            // trimcom = trimcom.replace(/ +/g, "");
+            // console.log(trimcom);
         });
+        session.send('😥😥 Fuck you go sleep'), session.message.text;
 
             }
     ])

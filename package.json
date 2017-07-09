@@ -27,6 +27,7 @@
     "path": "^0.12.7",
     "request": "^2.81.0",
     "request-ip": "^2.0.2",
+    "restify-plugins": "^1.6.0",
     "valid-url": "^1.0.9"
   }
 }

@@ -106,7 +106,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
     ])
 
 //Get Definition
-    .matches('def', [
+    .matches('search', [
         function (session, args, next) 
             {
         var startperiod = req.body.startperiod.replace(/-/g, '');
@@ -114,14 +114,15 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
         console.log(req.body);
         console.log(startperiod);
         console.log(endperiod);
+        var company_name = builder.EntityRecognizer.findEntity(args.entities, 'company');
         var myJSONObject = {
             "date":{"from": "20170105","to": "20170505"},
             //"date":{"from": startperiod, "to": endperiod},
             "restrictedDateRange": "false",
-            "text": req.body.company 
+            "text": company_name.entity
         };
         request({   
-            url: "https://finsights.mybluemix.net/api/query",
+            url: "https://discovery-news-demo.mybluemix.net/api/query",
             method: "POST",
             headers: {
                 "content-type": "application/json",

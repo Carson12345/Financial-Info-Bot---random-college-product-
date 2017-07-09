@@ -23,7 +23,7 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var path = require('path');
 var math = require('mathjs');
-
+const restifyBodyParser = require('restify-plugins').bodyParser;
 
 
 
@@ -44,7 +44,7 @@ var connector = new builder.ChatConnector({
     appPassword: "dkSH0iAhaZ7z5tOxEQeFWo5"
 });
 var bot = new builder.UniversalBot(connector);
-server.use(restify.bodyParser());
+server.use(restifyBodyParser());
 server.post('/api/messages', connector.listen());
 
 // Maximum number of hero cards to be returned in the carousel. If this number is greater than 10, skype throws an exception.
@@ -57,7 +57,7 @@ const textapikey = "ce6e99c7adf64cd196462ffb0646cd09";
 // This Url can be obtained by uploading or creating your model from the LUIS portal: https://www.luis.ai/
 
 
-const LuisModelUrl = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/ca2bb7a0-576b-4982-96cb-ba95f3c7759b?subscription-key=46ae75eb0b4844c9a8e5b77a6ac1e1ad&timezoneOffset=0&verbose=true&q=';
+const LuisModelUrl = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/53ee32e2-9ccb-487f-9aec-fea03a61dc64?subscription-key=46903b96fcad4ae081d17a710e8f6113&verbose=true&timezoneOffset=0&q=';
 
 
 // Main dialog with LUIS

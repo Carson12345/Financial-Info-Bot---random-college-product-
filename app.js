@@ -631,36 +631,36 @@ function cantcard(session) {
 function greetingcard(session) {
     return [
         new builder.HeroCard(session)
-        .title('Most updated saving advice 💡 ')
-        .subtitle('Check out if you are spending at the right pattern!')
+        .title('Real Time Market Sentiment Analysis 💡 ')
+        .subtitle('Try to ask me questions like: How is Apple/How is AAPL?')
         // .images([
         //     builder.CardImage.create(session, 'https://s13.postimg.org/4dpbpu87r/icons_proj3-01.jpg')
         // ])
         .buttons([
-            builder.CardAction.imBack(session, 'Am I on the right track?', 'Am I on the right track?')
+            builder.CardAction.imBack(session, 'How is AAPL?', 'How is XXX?')
     
         ])
         ,
 
         new builder.HeroCard(session)
-        .title('Check latest monthly report 📊 ')
-        .subtitle('Set new saving goal or edit current goal')
+        .title('Check out my linkedin profile 📊 ')
+        .subtitle('Hope you would like my past experience and skills')
         // .images([
         //     builder.CardImage.create(session, 'https://s16.postimg.org/sunkeafhx/icons_findppl-01.jpg')
         // ])
         .buttons([
-            builder.CardAction.imBack(session, 'Check monthly report', 'Check monthly report')
+            builder.CardAction.openUrl(session, 'https://www.linkedin.com/in/carson-yau-ming-yiu-57495b100/', 'My Linkedin')
         
         ]),
 
         new builder.HeroCard(session)
-        .title('Set Saving Goal 💲')
-        .subtitle('Set new saving goal or edit current goal')
+        .title('Check out my github')
+        .subtitle('See the source code and my other projects on my Github')
         // .images([
         //     builder.CardImage.create(session, 'https://s16.postimg.org/sunkeafhx/icons_findppl-01.jpg')
         // ])
         .buttons([
-            builder.CardAction.imBack(session, 'Edit saving goal', 'Edit saving goal')
+            builder.CardAction.openUrl(session, 'https://github.com/Carson12345', 'My Github')
         
         ])
         

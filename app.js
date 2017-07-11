@@ -113,41 +113,41 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                         "text": company_name.entity
                     };
         
-                    // request({   
-                    //         url: "https://discovery-news-demo.mybluemix.net/api/query",
-                    //         method: "POST",
-                    //         headers: {
-                    //             "content-type": "application/json",
-                    //         },
-                    //         json: true,   // <--Very important!!!
-                    //         body: myJSONObject
-                    //     }, 
-                    //     function(err, resp, body) {
-                    //         console.log("success");
-                    //         console.log(company_name.entity);
-                    //         console.log(body.aggregations[2].results[0].key);
-                    //         console.log("higher " + body.aggregations[4].results[0].matching_results);
-                    //         console.log("lower " + body.aggregations[4].results[1].matching_results);
-                    //         console.log("Neutral " + body.aggregations[4].results[2].matching_results);
-                    //         var higher = body.aggregations[4].results[0].matching_results;
-                    //         var lower = body.aggregations[4].results[1].matching_results;
-                    //         var neutral = body.aggregations[4].results[2].matching_results;
-                    //         var total = higher + lower + neutral;
-                    //         var neupert = math.round(neutral/total*100).toFixed(2);
-                    //         var higherpert = math.round(higher/total*100).toFixed(2);
-                    //         var lowerpert = math.round(lower/total*100).toFixed(2);
-                    //         console.log("higher Sentiment Percentage is " + higherpert + "%");
-                    //         console.log("lower Sentiment Percentage is " + lowerpert + "%");
-                    //         // console.log(JSON.stringify(body));
-                    //         if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
-                    //             session.send(company_name.entity + ' is doing quite well! '+ higherpert + "% of the internet comments are positive!"), session.message.text;
-                    //         } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
-                    //             session.send(company_name.entity + ' is not doing really well. '+ higherpert + "% of the internet comments are negative! While "+lowerpert+"% of those are negative"), session.message.text;
-                    //         } else {
-                    //             session.send("The market towards "+company_name.entity + ' is quite neutral. '+ neupert + "% of the internet comments are negative! WHile"+lowerpert+"% of those are positive"), session.message.text;
-                    //         }
+                    request({   
+                            url: "https://discovery-news-demo.mybluemix.net/api/query",
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json",
+                            },
+                            json: true,   // <--Very important!!!
+                            body: myJSONObject
+                        }, 
+                        function(err, resp, body) {
+                            console.log("success");
+                            console.log(company_name.entity);
+                            console.log(body.aggregations[2].results[0].key);
+                            console.log("higher " + body.aggregations[4].results[0].matching_results);
+                            console.log("lower " + body.aggregations[4].results[1].matching_results);
+                            console.log("Neutral " + body.aggregations[4].results[2].matching_results);
+                            var higher = body.aggregations[4].results[0].matching_results;
+                            var lower = body.aggregations[4].results[1].matching_results;
+                            var neutral = body.aggregations[4].results[2].matching_results;
+                            var total = higher + lower + neutral;
+                            var neupert = math.round(neutral/total*100).toFixed(2);
+                            var higherpert = math.round(higher/total*100).toFixed(2);
+                            var lowerpert = math.round(lower/total*100).toFixed(2);
+                            console.log("higher Sentiment Percentage is " + higherpert + "%");
+                            console.log("lower Sentiment Percentage is " + lowerpert + "%");
+                            // console.log(JSON.stringify(body));
+                            if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
+                                session.send(company_name.entity + ' is doing quite well! '+ higherpert + "% of the internet comments are positive!"), session.message.text;
+                            } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
+                                session.send(company_name.entity + ' is not doing really well. '+ higherpert + "% of the internet comments are negative! While "+lowerpert+"% of those are negative"), session.message.text;
+                            } else {
+                                session.send("The market towards "+company_name.entity + ' is quite neutral. '+ neupert + "% of the internet comments are negative! WHile"+lowerpert+"% of those are positive"), session.message.text;
+                            }
 
-                    //     });
+                        });
 
 
                     request({   
@@ -156,8 +156,9 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                         }, 
                         function(err, resp, body) {
                             console.log("success");
-                            var decoded_data = body.toString('binary');
-                            console.log(decoded_data);
+                            // var decoded_data = body.toString('binary');
+                            // console.log(decoded_data);
+                            console.log(body.ResultSet.Result.symbol.toString('binary'));
                             var stk_name = company_name.entity;
                             var cards = stockcard(session,stk_name,"2","2","4");
                             // attach the card to the reply message

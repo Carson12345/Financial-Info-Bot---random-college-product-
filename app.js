@@ -89,8 +89,6 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
 //Greetings
     .matches('greetings', [
         function (session, args, next) {
-            var learner = builder.EntityRecognizer.findEntity(args.entities, 'learner');
-            // session.send('Hi '+ session.message.address.user.name +' this is Muse, tell me what you are working on or what you want to find. I will get you the inspiration you need.', session.message.text);
             console.log(session.message.text);
                 var cards = greetingcard(session);
                 // attach the card to the reply message
@@ -100,8 +98,6 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                     .attachments(cards);
                 session.send(reply);
 
-
-                
   }
     ])
 
@@ -109,57 +105,75 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
     .matches('search', [
         function (session, args, next) 
             {
-        // var startperiod = req.body.startperiod.replace(/-/g, '');
-        // var endperiod = req.body.endperiod.replace(/-/g, '');
-        // console.log(req.body);
-        // console.log(startperiod);
-        // console.log(endperiod);
-        var company_name = builder.EntityRecognizer.findEntity(args.entities, 'company');
-        var myJSONObject = {
-            "date":{"from": "20170105","to": "20170705"},
-            //"date":{"from": startperiod, "to": endperiod},
-            "restrictedDateRange": "false",
-            "text": company_name.entity
-        };
-        request({   
-            url: "https://discovery-news-demo.mybluemix.net/api/query",
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            json: true,   // <--Very important!!!
-            body: myJSONObject
-        }, 
-        function(err, resp, body) {
-            console.log("success");
-            console.log(company_name.entity);
-            console.log(body.aggregations[2].results[0].key);
-            console.log("higher " + body.aggregations[4].results[0].matching_results);
-            console.log("lower " + body.aggregations[4].results[1].matching_results);
-            console.log("Neutral " + body.aggregations[4].results[2].matching_results);
-            var higher = body.aggregations[4].results[0].matching_results;
-            var lower = body.aggregations[4].results[1].matching_results;
-            var neutral = body.aggregations[4].results[2].matching_results;
-            var total = higher + lower + neutral;
-            var neupert = math.round(neutral/total*100).toFixed(2);
-            var higherpert = math.round(higher/total*100).toFixed(2);
-            var lowerpert = math.round(lower/total*100).toFixed(2);
-            console.log("higher Sentiment Percentage is " + higherpert + "%");
-            console.log("lower Sentiment Percentage is " + lowerpert + "%");
-            // console.log(JSON.stringify(body));
-            if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
-                session.send(company_name.entity + ' is doing quite well! '+ higherpert + "% of the internet comments are positive!"), session.message.text;
-            } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
-                session.send(company_name.entity + ' is not doing really well. '+ higherpert + "% of the internet comments are negative!"), session.message.text;
-            } else {
-                session.send("The market towards "+company_name.entity + ' is quite neutral. '+ neupert + "% of the internet comments are negative!"), session.message.text;
-            }
-            // var trimcom = "";
-            // trimcom = company_name;
-            // trimcom = trimcom.replace(/ +/g, "");
-            // console.log(trimcom);
-        });
+                                        var company_name = builder.EntityRecognizer.findEntity(args.entities, 'company');
+                    var myJSONObject = {
+                        "date":{"from": "20170105","to": "20170705"},
+                        //"date":{"from": startperiod, "to": endperiod},
+                        "restrictedDateRange": "false",
+                        "text": company_name.entity
+                    };
         
+                    // request({   
+                    //         url: "https://discovery-news-demo.mybluemix.net/api/query",
+                    //         method: "POST",
+                    //         headers: {
+                    //             "content-type": "application/json",
+                    //         },
+                    //         json: true,   // <--Very important!!!
+                    //         body: myJSONObject
+                    //     }, 
+                    //     function(err, resp, body) {
+                    //         console.log("success");
+                    //         console.log(company_name.entity);
+                    //         console.log(body.aggregations[2].results[0].key);
+                    //         console.log("higher " + body.aggregations[4].results[0].matching_results);
+                    //         console.log("lower " + body.aggregations[4].results[1].matching_results);
+                    //         console.log("Neutral " + body.aggregations[4].results[2].matching_results);
+                    //         var higher = body.aggregations[4].results[0].matching_results;
+                    //         var lower = body.aggregations[4].results[1].matching_results;
+                    //         var neutral = body.aggregations[4].results[2].matching_results;
+                    //         var total = higher + lower + neutral;
+                    //         var neupert = math.round(neutral/total*100).toFixed(2);
+                    //         var higherpert = math.round(higher/total*100).toFixed(2);
+                    //         var lowerpert = math.round(lower/total*100).toFixed(2);
+                    //         console.log("higher Sentiment Percentage is " + higherpert + "%");
+                    //         console.log("lower Sentiment Percentage is " + lowerpert + "%");
+                    //         // console.log(JSON.stringify(body));
+                    //         if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
+                    //             session.send(company_name.entity + ' is doing quite well! '+ higherpert + "% of the internet comments are positive!"), session.message.text;
+                    //         } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
+                    //             session.send(company_name.entity + ' is not doing really well. '+ higherpert + "% of the internet comments are negative! While "+lowerpert+"% of those are negative"), session.message.text;
+                    //         } else {
+                    //             session.send("The market towards "+company_name.entity + ' is quite neutral. '+ neupert + "% of the internet comments are negative! WHile"+lowerpert+"% of those are positive"), session.message.text;
+                    //         }
+
+                    //     });
+
+
+                    request({   
+                            url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="+company_name.entity+"&region=1&lang=en&callback=YAHOO.Finance.SymbolSuggest.ssCallback",
+                            method: "GET",
+                        }, 
+                        function(err, resp, body) {
+                            console.log("success");
+                            var decoded_data = body.toString('binary');
+                            console.log(decoded_data);
+                            var stk_name = company_name.entity;
+                            var cards = stockcard(session,stk_name,"2","2","4");
+                            // attach the card to the reply message
+                            var reply = new builder.Message(session)
+                                .text('😉 Sure! Consider the folowing:')
+                                .attachmentLayout(builder.AttachmentLayout.carousel)
+                                .attachments(cards);
+                            session.send(reply);
+                        })
+
+            },
+            function (session, args, next) 
+            {
+                    console.log("success");
+
+
 
             }
     ])
@@ -444,7 +458,23 @@ function topic_card(planobj,key) {
         ]);
 }
 
-//find value
+//Stock quote
+function stockcard(session,name,pic,ticker,exc) {
+    return [ 
+        new builder.HeroCard(session)
+        .title(name)
+        .subtitle(exc)
+        .text(ticker)
+        .images([
+            builder.CardImage.create(session, pic)
+        ])
+        .buttons([
+            builder.CardAction.imBack(session, 'Details', 'Details')
+    
+        ])
+        
+    ]
+}
 
 
 //create Array
@@ -482,54 +512,7 @@ function intersect_arr(a, b)
 
 
 
-//pplcard
-function jetsocard(session) {
-    return [ 
-        new builder.HeroCard(session)
-        .title('Genki Sushi')
-        .subtitle('The Mira Hong Kon, 118 Nathan Rd, Tsim Sha Tsui')
-        .text('25% off for Hang Seng Bank Credit Card')
-        .images([
-            builder.CardImage.create(session, 'https://s7.postimg.org/5ggrvu44r/genki-01.png')
-        ])
-        .buttons([
-            builder.CardAction.imBack(session, 'Details', 'Details')
-    
-        ])
-        ,
 
-        new builder.HeroCard(session)
-        .title('Sushi Shikon')
-        .subtitle('The Peninsula Hong Kong, 28/F Salisbury Rd, Tsim Sha Tsui ')
-        .text('15% off for Hang Seng Bank Credit Card')
-        .images([
-            builder.CardImage.create(session, 'https://www.hangseng.com/cms/emkt/pmo/grp04/p38/chi/images/logo/shikon.jpg')
-        ])
-        // .buttons([
-        //     builder.CardAction.openUrl(session, 'http://www.ifva.com/?p=7620&lang=en', 'Apply Now')
-        // ])
-        .buttons([
-            builder.CardAction.imBack(session, 'Details', 'Details')
-    
-        ])
-        ,
-
-        new builder.HeroCard(session)
-        .title('温野菜')
-        .subtitle('29+30F, 1 Peking Rd, Tsim Sha Tsui')
-        .text('20% off for Hang Seng Bank Credit Card')
-        .buttons([
-            builder.CardAction.imBack(session, 'Details', 'Details')
-    
-        ])
-        .images([
-            builder.CardImage.create(session, 'https://www.hangseng.com/cms/emkt/pmo/grp04/p38/chi/images/logo/ony.jpg')
-        ])
-        // .buttons([
-        //     builder.CardAction.openUrl(session, 'http://www.ifva.com/?p=7620&lang=en', 'Apply Now')
-        // ])
-    ]
-}
 
 //pplcard
 function pplcard(session) {

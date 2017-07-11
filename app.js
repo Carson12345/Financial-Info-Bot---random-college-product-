@@ -105,7 +105,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
     .matches('search', [
         function (session, args, next) 
             {
-                                        var company_name = builder.EntityRecognizer.findEntity(args.entities, 'company');
+                    var company_name = builder.EntityRecognizer.findEntity(args.entities, 'company');
                     var myJSONObject = {
                         "date":{"from": "20170105","to": "20170705"},
                         //"date":{"from": startperiod, "to": endperiod},
@@ -150,24 +150,24 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                         });
 
 
-                    request({   
-                            url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="+company_name.entity+"&region=1&lang=en&callback=YAHOO.Finance.SymbolSuggest.ssCallback",
-                            method: "GET",
-                        }, 
-                        function(err, resp, body) {
-                            console.log("success");
-                            // var decoded_data = body.toString('binary');
-                            // console.log(decoded_data);
-                            console.log(body.ResultSet.Result.symbol.toString('binary'));
-                            var stk_name = company_name.entity;
-                            var cards = stockcard(session,stk_name,"2","2","4");
-                            // attach the card to the reply message
-                            var reply = new builder.Message(session)
-                                .text('😉 Sure! Consider the folowing:')
-                                .attachmentLayout(builder.AttachmentLayout.carousel)
-                                .attachments(cards);
-                            session.send(reply);
-                        })
+                    // request({   
+                    //         url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="+company_name.entity+"&region=1&lang=en&callback=YAHOO.Finance.SymbolSuggest.ssCallback",
+                    //         method: "GET",
+                    //     }, 
+                    //     function(err, resp, body) {
+                    //         console.log("success");
+                    //         // var decoded_data = body.toString('binary');
+                    //         // console.log(decoded_data);
+                    //         console.log(body.ResultSet.Result.symbol.toString('binary'));
+                    //         var stk_name = company_name.entity;
+                    //         var cards = stockcard(session,stk_name,"2","2","4");
+                    //         // attach the card to the reply message
+                    //         var reply = new builder.Message(session)
+                    //             .text('😉 Sure! Consider the folowing:')
+                    //             .attachmentLayout(builder.AttachmentLayout.carousel)
+                    //             .attachments(cards);
+                    //         session.send(reply);
+                    //     })
 
             },
             function (session, args, next) 

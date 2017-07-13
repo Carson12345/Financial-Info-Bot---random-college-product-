@@ -278,9 +278,8 @@ function constructwikiCard(page) {
 function stockcard(session,name,pic,ticker,exc) {
     return [ 
         new builder.ThumbnailCard(session)
-        .title( name)
+        .title( name  + "(" + ticker +")")
         .subtitle("Exchange: " + exc)
-        .text("Code: " + ticker)
         .images([
             builder.CardImage.create(session, pic)
         ])

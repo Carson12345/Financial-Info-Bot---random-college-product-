@@ -161,10 +161,10 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                             var info_stock = JSON.parse(decoded_data)
 
                             try {
-                                console.log(info_stock.ResultSet.Result[1].symbol);
-                                var stock_name = info_stock.ResultSet.Result[1].name;
-                                var ticker = info_stock.ResultSet.Result[1].symbol;
-                                var exc_code = info_stock.ResultSet.Result[1].exchDisp;
+                                console.log(info_stock.ResultSet.Result[0].symbol);
+                                var stock_name = info_stock.ResultSet.Result[0].name;
+                                var ticker = info_stock.ResultSet.Result[0].symbol;
+                                var exc_code = info_stock.ResultSet.Result[0].exchDisp;
                                 var pic = "https://logo.clearbit.com/" + company_name.entity +".com?size=200";
                                 var cards = stockcard(session,stock_name,pic,ticker,exc_code);
                                 // attach the card to the reply message
@@ -174,6 +174,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                     .attachments(cards);
                                 session.send(reply);
                                 next();
+                                
                             } catch(error) {
                                 session.send('Sorry, maybe check the spelling of the company?', session.message.text);
                                 next();

@@ -150,24 +150,31 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                         });
 
 
-                    // request({   
-                    //         url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="+company_name.entity+"&region=1&lang=en&callback=YAHOO.Finance.SymbolSuggest.ssCallback",
-                    //         method: "GET",
-                    //     }, 
-                    //     function(err, resp, body) {
-                    //         console.log("success");
-                    //         // var decoded_data = body.toString('binary');
-                    //         // console.log(decoded_data);
-                    //         console.log(body.ResultSet.Result.symbol.toString('binary'));
-                    //         var stk_name = company_name.entity;
-                    //         var cards = stockcard(session,stk_name,"2","2","4");
-                    //         // attach the card to the reply message
-                    //         var reply = new builder.Message(session)
-                    //             .text('😉 Sure! Consider the folowing:')
-                    //             .attachmentLayout(builder.AttachmentLayout.carousel)
-                    //             .attachments(cards);
-                    //         session.send(reply);
-                    //     })
+                    request({   
+                            url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="+company_name.entity+"&region=1&lang=en",
+                            method: "GET",
+                        }, 
+                        function(err, resp, body) {
+                            console.log("success");
+                            var decoded_data = body.toString('binary');
+                            console.log(decoded_data);
+                            var info_stock = JSON.parse(decoded_data)
+                            console.log(info_stock.ResultSet.Result[1].symbol);
+                            var stock_name = info_stock.ResultSet.Result[1].name;
+                            var ticker = info_stock.ResultSet.Result[1].symbol;
+                            var exc_code = info_stock.ResultSet.Result[1].exchDisp;
+                            var pic = "https://logo.clearbit.com/" + company_name.entity +".com?size=200";
+                
+                            var cards = stockcard(session,stock_name,pic,ticker,exc_code);
+                            // attach the card to the reply message
+                            var reply = new builder.Message(session)
+                                .text('I think you are looking for this')
+                                .attachmentLayout(builder.AttachmentLayout.carousel)
+                                .attachments(cards);
+                            session.send(reply);
+
+                        })
+                    next();
 
             },
             function (session, args, next) 
@@ -176,192 +183,9 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
 
 
 
+
             }
     ])
-
-//Check updates resources
-    .matches('check1', [
-        function (session, args, next) 
-            {
-                var cards = eventcard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .text('😉 Sure! Consider the folowing:')
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-                session.send('😥😥 You are not on the right track! Try to spend less!'), session.message.text;
-                
-                
-        }
-  
-])
-
-//Getjobs
-    .matches('risk', [
-        function (session, args, next) 
-        {
-                session.send('Of course! 😉😉 Let me help you conduct a risk profiling.', session.message.text);
-                builder.Prompts.text(session, 'Would you like to set aside part of your net worth for investments? Please note that there is a potential for loss of your capital when investing in any investment products?');
-
-        },
-         function (session, args, next) {
-            builder.Prompts.text(session, 'How much of your income would you like to set aside for savings or investment in investment products? Please give me a percentage.');
-        },
-        function (session, results, next) {
-            var learner_des = results.response;
-            learner_des_ID = learner_des;
-            session.send('The anlyzed result is as follows:', session.message.text);
-            session.send('You are Type A Risk Averse ...', session.message.text);
-                var cards = optioncard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .text('You can choose the investment products that match your risk profile')
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-                
-        }        
-])
-
-
-//Check updates learn
-    .matches('check2', [
-
-    function (session, args, next) {
-            builder.Prompts.text(session, '😉 Congrats! You met your saving target this month!');
-            var cards = pplcard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-        },
-        function (session, results, next) {
-            var learner_des = results.response;
-            if (results.response == "See wealth growth") {
-
-                var cards = savingcard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-
-            } else if (results.response == "Advice on reducing expenditure") {
-
-                var cards = breakcard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-                var cards = jetsocard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .text('I have found out that you like to have Japanese food in Tsim Sha Tsui always, I suggest you to go to these restaurants that offer discounts to Hang Seng Bank users')
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-
-            } else if (results.response == "Advice on expanding income sources") {
-
-                var cards = incomecard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-
-            }
-            learner_des_ID = learner_des;
-            // session.send('Sure! I will monitor your expenditure and income and help you achieve your goal!'), session.message.text;
-
-
-    }
-])
-
-//Check updates learn
-.matches('checksad', [
-
-    function (session, args, next) {
-            builder.Prompts.text(session, '😥😥 Oh..you does not meet your saving goal this month');
-            var cards = cantcard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-        },
-        function (session, results, next) {
-            var learner_des = results.response;
-            if (results.response == "See wealth growth") {
-
-                var cards = savingcard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-
-            } else if (results.response == "Advice on reducing expenditure") {
-
-                var cards = breakcard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-                var cards = jetsocard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .text('I have found out that you like to have Japanese food in Tsim Sha Tsui always, I suggest you to go to these restaurants that offer discounts to Hang Seng Bank users')
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-
-            } else if (results.response == "How can I increase income streams?") {
-
-                var cards = incomecard(session);
-                // attach the card to the reply message
-                var reply = new builder.Message(session)
-                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                    .attachments(cards);
-                session.send(reply);
-
-            }
-            learner_des_ID = learner_des;
-            
-
-
-    }
-])
-
-
-
-.matches('startsaving', [
-        function (session, args, next) 
-            {
-
-            builder.Prompts.text(session, 'Got it! How much is your saving goal per month?');
-            },
-            function (session, results, next) {
-            var learner_des = results.response;
-            learner_des_ID = learner_des
-            
-            builder.Prompts.text(session, 'That is great!👍 May I know what are the main purposes of the saving?');
-        },
-         function (session, results,next) {
-            var userid = session.message.address.user.id;
-            var plan_chosen = results.response;
-            plan_chosen_ID = plan_chosen;
-            session.send('Sure! I will monitor your expenditure and income and help you achieve your goal!'), session.message.text;
-            //send data to database for learning - send plan title chosen, search request, plan id
-         
-         }
-        
-    ])
-
 
 
 
@@ -442,30 +266,15 @@ function constructwikiCard(page) {
                     }
 
 
-//topiccard
-function topic_card(planobj,key) {
-    return new builder.HeroCard()
-        .title(planobj[key]['PlanTitle'])
-        .subtitle(planobj[key]['PlanDetails'])
 
-        .images([
-            builder.CardImage.create(null, (planobj[key]['PlanPicture']))
-        ])
-        .buttons([
-            new builder.CardAction.postBack()
-                                    .title('Add this to my profile')
-                                    .type('postBack')
-                                    .value(planobj[key]['PlanID'])
-        ]);
-}
 
 //Stock quote
 function stockcard(session,name,pic,ticker,exc) {
     return [ 
         new builder.HeroCard(session)
-        .title(name)
-        .subtitle(exc)
-        .text(ticker)
+        .title("Company Name: " + name)
+        .subtitle("Exchange " + exc)
+        .text("Code: " + ticker)
         .images([
             builder.CardImage.create(session, pic)
         ])

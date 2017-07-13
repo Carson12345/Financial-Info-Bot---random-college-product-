@@ -277,8 +277,8 @@ function constructwikiCard(page) {
 //Stock quote
 function stockcard(session,name,pic,ticker,exc) {
     return [ 
-        new builder.ThumbnailCard(session)
-        .title( name  + "(" + ticker +")")
+        new builder.herocard(session)
+        .title( name  + " (" + ticker +")")
         .subtitle("Exchange: " + exc)
         .images([
             builder.CardImage.create(session, pic)

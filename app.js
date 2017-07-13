@@ -159,22 +159,28 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                             var decoded_data = body.toString('binary');
                             console.log(decoded_data);
                             var info_stock = JSON.parse(decoded_data)
-                            console.log(info_stock.ResultSet.Result[1].symbol);
-                            var stock_name = info_stock.ResultSet.Result[1].name;
-                            var ticker = info_stock.ResultSet.Result[1].symbol;
-                            var exc_code = info_stock.ResultSet.Result[1].exchDisp;
-                            var pic = "https://logo.clearbit.com/" + company_name.entity +".com?size=200";
-                
-                            var cards = stockcard(session,stock_name,pic,ticker,exc_code);
-                            // attach the card to the reply message
-                            var reply = new builder.Message(session)
-                                .text('I think you are looking for this')
-                                .attachmentLayout(builder.AttachmentLayout.carousel)
-                                .attachments(cards);
-                            session.send(reply);
 
+                            try {
+                                console.log(info_stock.ResultSet.Result[1].symbol);
+                                var stock_name = info_stock.ResultSet.Result[1].name;
+                                var ticker = info_stock.ResultSet.Result[1].symbol;
+                                var exc_code = info_stock.ResultSet.Result[1].exchDisp;
+                                var pic = "https://logo.clearbit.com/" + company_name.entity +".com?size=200";
+                                var cards = stockcard(session,stock_name,pic,ticker,exc_code);
+                                // attach the card to the reply message
+                                var reply = new builder.Message(session)
+                                    .text('I think you are looking for this')
+                                    .attachmentLayout(builder.AttachmentLayout.carousel)
+                                    .attachments(cards);
+                                session.send(reply);
+                                next();
+                            } catch(error) {
+                                session.send('Sorry, maybe check the spelling of the company?', session.message.text);
+                                next();
+
+                            }
                         })
-                    next();
+                    
 
             },
             function (session, args, next) 
@@ -271,9 +277,9 @@ function constructwikiCard(page) {
 //Stock quote
 function stockcard(session,name,pic,ticker,exc) {
     return [ 
-        new builder.HeroCard(session)
-        .title("Company Name: " + name)
-        .subtitle("Exchange " + exc)
+        new builder.ThumbnailCard(session)
+        .title( name)
+        .subtitle("Exchange: " + exc)
         .text("Code: " + ticker)
         .images([
             builder.CardImage.create(session, pic)

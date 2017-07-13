@@ -165,7 +165,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                 var stock_name = info_stock.ResultSet.Result[0].name;
                                 var ticker = info_stock.ResultSet.Result[0].symbol;
                                 var exc_code = info_stock.ResultSet.Result[0].exchDisp;
-                                var pic = "https://logo.clearbit.com/" + company_name.entity +".com?size=200";
+                                var pic = "https://logo.clearbit.com/" + company_name.entity +".com?size=100";
                                 var cards = stockcard(session,stock_name,pic,ticker,exc_code);
                                 // attach the card to the reply message
                                 var reply = new builder.Message(session)
@@ -174,7 +174,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                     .attachments(cards);
                                 session.send(reply);
                                 next();
-                                
+
                             } catch(error) {
                                 session.send('Sorry, maybe check the spelling of the company?', session.message.text);
                                 next();
@@ -278,7 +278,7 @@ function constructwikiCard(page) {
 //Stock quote
 function stockcard(session,name,pic,ticker,exc) {
     return [ 
-        new builder.herocard(session)
+        new builder.HeroCard(session)
         .title( name  + " (" + ticker +")")
         .subtitle("Exchange: " + exc)
         .images([

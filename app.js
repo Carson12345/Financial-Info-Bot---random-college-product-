@@ -203,6 +203,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                                                         .attachmentLayout(builder.AttachmentLayout.carousel)
                                                                         .attachments(cards);
                                             bot.send(reply);
+                                            session.send('Hope the info helps! Ask me about another company!', session.message.text);
                                         break;
                                     case "2":
                                             //hot companies
@@ -218,6 +219,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                                                         .attachmentLayout(builder.AttachmentLayout.carousel)
                                                                         .attachments(cards2);
                                             bot.send(reply2);
+                                            session.send('Hope the info helps! Ask me about another company!', session.message.text);
                                         break;
                                     case "3":
                                             // //hot topic
@@ -232,6 +234,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                                                         .attachmentLayout(builder.AttachmentLayout.carousel)
                                                                         .attachments(cards3);
                                             bot.send(reply3);
+                                            session.send('Hope the info helps! Ask me about another company!', session.message.text);
                                             
                                         break;
 
@@ -243,7 +246,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                     } else {
                                         session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say the market sentiment towards' +learner_des_ID + ' is quite neutral. '+ neupert + "% of the internet comments are negative! WHile"+lowerpert+"% of those are positive"), session.message.text;
                                     }
-                                        
+                                        session.send('Hope the info helps! Ask me about another company!', session.message.text);
                                     }
                                 
 

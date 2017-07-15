@@ -74,11 +74,14 @@ bot.on('conversationUpdate', message => {
     if (message.membersAdded) {
         message.membersAdded.forEach(identity => {
             if (identity.id === message.address.bot.id) {
-                const reply = new builder.Message()
-                    .address(message.address)
-                    .text('Welcome back! How can I help you?');
-                    
-                bot.send(reply);
+
+                var cards = greetingcard(session);
+                // attach the card to the reply message
+                var reply = new builder.Message(session)
+                    .text('Hi! How can I help you?')
+                    .attachmentLayout(builder.AttachmentLayout.carousel)
+                    .attachments(cards);
+                session.send(reply);
                 console.log(message.address);
                 console.log("The userid is: " + message.address.user.id);
                 

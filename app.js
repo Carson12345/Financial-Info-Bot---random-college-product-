@@ -514,7 +514,7 @@ function greetingcard(session) {
     return [
         new builder.HeroCard(session)
         .title('Real Time Market Sentiment Analysis 💡 ')
-        .subtitle('Try to ask me questions like: How is Apple/How is AAPL?')
+        .subtitle('Try to ask me questions like: How is Apple/How is AAPL? Please try to ask about listed companies only, thanks!')
         // .images([
         //     builder.CardImage.create(session, 'https://s13.postimg.org/4dpbpu87r/icons_proj3-01.jpg')
         // ])

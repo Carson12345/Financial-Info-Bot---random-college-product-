@@ -245,7 +245,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                     } else 
                                     // ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) 
                                     {
-                                        session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say ' + learner_des_ID + ' is not doing really well. '+ higherpert + "% of the internet comments are negative! While "+lowerpert+"% of those are negative"), session.message.text;
+                                        session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say ' + learner_des_ID + ' is not doing really well. '+ higherpert + "% of the internet comments are negative! While just "+lowerpert+"% of those are positive"), session.message.text;
                                     } 
                                             var cards5 = new Array();
                                             for (var l = 0; l < body.results.length; l++) {

@@ -359,14 +359,15 @@ function stockcard(session,name,pic,ticker,exc) {
         .title( name  + " (" + ticker +")")
         .subtitle("Exchange: " + exc)
 
-        .text("Please choose from the following options for the sentiment analysis")
+        .text("Please choose from the following options for more detailed analysis")
         .buttons([
-            builder.CardAction.postBack(session, '4', 'Show Market Sentiment statistics')
+            builder.CardAction.postBack(session, '4', 'Show Market Sentiment statistics'),
             builder.CardAction.openUrl(session, 'http://www.cnbc.com/quotes/?symbol=' + ticker, 'Stock Performance'),
             builder.CardAction.postBack(session, '1', 'See supporting news articles'),
             builder.CardAction.postBack(session, '2', 'See trending most mentioned topics'),
-            builder.CardAction.postBack(session, '3', 'See co-mentioned companies'),
+            builder.CardAction.postBack(session, '3', 'See co-mentioned companies')
             
+    
         ])
         
     ]

@@ -255,7 +255,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                             }
                                             const reply5 = new builder.Message()
                                                                         .address(session.message.address)
-                                                                        .text('These are some sources that make up the ' + body.aggregations[4].results[0].key + ' sentiment towards ' + learner_des_ID)
+                                                                        .text('There is a overall ' + body.aggregations[4].results[0].key + ' sentiment towards ' + learner_des_ID + 'Here are some of the supporting sources.')
                                                                         .attachmentLayout(builder.AttachmentLayout.carousel)
                                                                         .attachments(cards5);
                                             bot.send(reply5);

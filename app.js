@@ -132,7 +132,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                 var stock_name = info_stock.ResultSet.Result[0].name;
                                 var ticker = info_stock.ResultSet.Result[0].symbol;
                                 var exc_code = info_stock.ResultSet.Result[0].exchDisp;
-                                var pic = "https://logo.clearbit.com/" + company_name_ID.entity +".com?size=300";
+                                var pic = "https://logo.clearbit.com/" + company_name_ID.entity +".com?size=800";
                                 var cards = stockcard(session,stock_name,pic,ticker,exc_code);
                                 // attach the card to the reply message
                                 var reply = new builder.Message(session)

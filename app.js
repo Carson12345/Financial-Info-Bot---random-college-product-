@@ -43,6 +43,11 @@ var connector = new builder.ChatConnector({
     appId: "561fc406-6389-4d62-83f8-5635d0a53e37",
     appPassword: "dkSH0iAhaZ7z5tOxEQeFWo5"
 });
+
+
+
+
+
 var bot = new builder.UniversalBot(connector);
 server.use(restifyBodyParser());
 server.post('/api/messages', connector.listen());
@@ -93,10 +98,11 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                 var cards = greetingcard(session);
                 // attach the card to the reply message
                 var reply = new builder.Message(session)
-                    .text('Hi, '+ session.message.address.user.name +'! How can I help you?')
+                    .text('Hi! How can I help you?')
                     .attachmentLayout(builder.AttachmentLayout.carousel)
                     .attachments(cards);
                 session.send(reply);
+
 
   }
     ])
@@ -104,54 +110,14 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
 //Get Definition
     .matches('search', [
         function (session, args, next) 
-            {
-                    var company_name = builder.EntityRecognizer.findEntity(args.entities, 'company');
-                    var myJSONObject = {
-                        "date":{"from": "20170105","to": "20170705"},
-                        //"date":{"from": startperiod, "to": endperiod},
-                        "restrictedDateRange": "false",
-                        "text": company_name.entity
-                    };
         
-                    request({   
-                            url: "https://discovery-news-demo.mybluemix.net/api/query",
-                            method: "POST",
-                            headers: {
-                                "content-type": "application/json",
-                            },
-                            json: true,   // <--Very important!!!
-                            body: myJSONObject
-                        }, 
-                        function(err, resp, body) {
-                            console.log("success");
-                            console.log(company_name.entity);
-                            console.log(body.aggregations[2].results[0].key);
-                            console.log("higher " + body.aggregations[4].results[0].matching_results);
-                            console.log("lower " + body.aggregations[4].results[1].matching_results);
-                            console.log("Neutral " + body.aggregations[4].results[2].matching_results);
-                            var higher = body.aggregations[4].results[0].matching_results;
-                            var lower = body.aggregations[4].results[1].matching_results;
-                            var neutral = body.aggregations[4].results[2].matching_results;
-                            var total = higher + lower + neutral;
-                            var neupert = math.round(neutral/total*100).toFixed(2);
-                            var higherpert = math.round(higher/total*100).toFixed(2);
-                            var lowerpert = math.round(lower/total*100).toFixed(2);
-                            console.log("higher Sentiment Percentage is " + higherpert + "%");
-                            console.log("lower Sentiment Percentage is " + lowerpert + "%");
-                            // console.log(JSON.stringify(body));
-                            if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
-                                session.send(company_name.entity + ' is doing quite well! '+ higherpert + "% of the internet comments are positive!"), session.message.text;
-                            } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
-                                session.send(company_name.entity + ' is not doing really well. '+ higherpert + "% of the internet comments are negative! While "+lowerpert+"% of those are negative"), session.message.text;
-                            } else {
-                                session.send("The market towards "+company_name.entity + ' is quite neutral. '+ neupert + "% of the internet comments are negative! WHile"+lowerpert+"% of those are positive"), session.message.text;
-                            }
-
-                        });
-
-
-                    request({   
-                            url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="+company_name.entity+"&region=1&lang=en",
+                        {
+                        var company_name_ID = builder.EntityRecognizer.findEntity(args.entities, 'company');
+                        var learner_des = company_name_ID;
+                        learner_des_ID = learner_des.entity;
+                        console.log("yes!! " + learner_des_ID);
+                        request({   
+                            url: "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="+company_name_ID.entity+"&region=1&lang=en",
                             method: "GET",
                         }, 
                         function(err, resp, body) {
@@ -160,38 +126,135 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                             console.log(decoded_data);
                             var info_stock = JSON.parse(decoded_data)
 
-                            try {
+                            try 
+                                {
                                 console.log(info_stock.ResultSet.Result[0].symbol);
                                 var stock_name = info_stock.ResultSet.Result[0].name;
                                 var ticker = info_stock.ResultSet.Result[0].symbol;
                                 var exc_code = info_stock.ResultSet.Result[0].exchDisp;
-                                var pic = "https://logo.clearbit.com/" + company_name.entity +".com?size=100";
+                                var pic = "https://logo.clearbit.com/" + company_name_ID.entity +".com?size=300";
                                 var cards = stockcard(session,stock_name,pic,ticker,exc_code);
                                 // attach the card to the reply message
                                 var reply = new builder.Message(session)
-                                    .text('I think you are looking for this')
+                                    .text('I think you are looking for this company. ')
                                     .attachmentLayout(builder.AttachmentLayout.carousel)
                                     .attachments(cards);
                                 session.send(reply);
-                                next();
 
-                            } catch(error) {
+                                } 
+                            catch(error) 
+                                {
                                 session.send('Sorry, maybe check the spelling of the company?', session.message.text);
-                                next();
 
-                            }
-                        })
+                                }
+                            })
                     
-
-            },
-            function (session, args, next) 
-            {
-                    console.log("success");
+                            builder.Prompts.text(session, 'loading...');
 
 
+                        }, function (session, results, next) {
+                            var company_name = learner_des_ID;
+                            var purpose = results.response;
+                            console.log(purpose);
+                            var myJSONObject = {
+                                "date":{"from": getDate()-7,"to": getDate()},
+                                //"date":{"from": startperiod, "to": endperiod},
+                                "restrictedDateRange": "false",
+                                "text": learner_des_ID
+                            };
 
+                
+                            request({   
+                                    url: "https://discovery-news-demo.mybluemix.net/api/query",
+                                    method: "POST",
+                                    headers: {
+                                        "content-type": "application/json",
+                                    },
+                                    json: true,   // <--Very important!!!
+                                    body: myJSONObject
+                                }, 
+                                function(err, resp, body) {
+                                    
+                                    console.log(body.aggregations[2].results[0].key);
+                                    console.log("higher " + body.aggregations[4].results[0].matching_results);
+                                    console.log("lower " + body.aggregations[4].results[1].matching_results);
+                                    console.log("Neutral " + body.aggregations[4].results[2].matching_results);
+                                    var higher = body.aggregations[4].results[0].matching_results;
+                                    var lower = body.aggregations[4].results[1].matching_results;
+                                    var neutral = body.aggregations[4].results[2].matching_results;
+                                    var total = higher + lower + neutral;
+                                    var neupert = math.round(neutral/total*100).toFixed(2);
+                                    var higherpert = math.round(higher/total*100).toFixed(2);
+                                    var lowerpert = math.round(lower/total*100).toFixed(2);
+                                    console.log("higher Sentiment Percentage is " + higherpert + "%");
+                                    console.log("lower Sentiment Percentage is " + lowerpert + "%");
+                                    console.log(purpose);
+                                    switch (purpose) {
+                                    case "1":
+                                            // //hot stories
+                                            console.log(body.results[2]);
+                                            var cards = new Array();
+                                            for (var l = 0; l < body.results.length; l++) {
+                                                cards.push(news_card(body.results[l].title,body.results[l].url,body.results[l].host));
+                                            }
+                                            const reply = new builder.Message()
+                                                                        .address(session.message.address)
+                                                                        .text('These are some sources that make up the ' + body.aggregations[4].results[0].key + ' sentiment towards ' + learner_des_ID)
+                                                                        .attachmentLayout(builder.AttachmentLayout.carousel)
+                                                                        .attachments(cards);
+                                            bot.send(reply);
+                                        break;
+                                    case "2":
+                                            //hot companies
+                                            console.log(body.aggregations[0]);
+                                            console.log(body.aggregations[0].aggregations[0].aggregations[0].results.key);
+                                            var cards2 = new Array();
+                                            for (var l = 0; l < body.aggregations[0].aggregations[0].aggregations[0].results.length; l++) {
+                                                cards2.push(entities_card(body.aggregations[0].aggregations[0].aggregations[0].results[l].key,body.aggregations[0].aggregations[0].aggregations[0].results[l].matching_results));
+                                            }
+                                            const reply2 = new builder.Message()
+                                                                        .address(session.message.address)
+                                                                        .text('These are the other companies people mention when talking about ' + learner_des_ID)
+                                                                        .attachmentLayout(builder.AttachmentLayout.carousel)
+                                                                        .attachments(cards2);
+                                            bot.send(reply2);
+                                        break;
+                                    case "3":
+                                            // //hot topic
 
-            }
+                                            var cards3 = new Array();
+                                            for (var l = 0; l < body.aggregations[2].results.length; l++) {
+                                                cards3.push(entities_card(body.aggregations[2].results[l].key,body.aggregations[2].results[l].matching_results));
+                                            }
+                                            const reply3 = new builder.Message()
+                                                                        .address(session.message.address)
+                                                                        .text('These are the topic people concern about ' + learner_des_ID)
+                                                                        .attachmentLayout(builder.AttachmentLayout.carousel)
+                                                                        .attachments(cards3);
+                                            bot.send(reply3);
+                                            
+                                        break;
+
+                                    case "4":
+                                    if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
+                                        session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say ' + learner_des_ID + ' is doing quite well! '+ higherpert + "% of the internet comments are positive! While "+lowerpert+"% of those are negative"), session.message.text;
+                                    } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
+                                        session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say ' + learner_des_ID + ' is not doing really well. '+ higherpert + "% of the internet comments are negative! While "+lowerpert+"% of those are negative"), session.message.text;
+                                    } else {
+                                        session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say the market sentiment towards' +learner_des_ID + ' is quite neutral. '+ neupert + "% of the internet comments are negative! WHile"+lowerpert+"% of those are positive"), session.message.text;
+                                    }
+                                        
+                                    }
+                                
+
+                        
+
+                            });
+                        
+  
+
+                        }
+                        
     ])
 
 
@@ -200,8 +263,6 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
 
     .onDefault(
         
-
-
         (session) => {
         try {
             console.log(session.message.attachments[0]['contentUrl']);
@@ -274,18 +335,34 @@ function constructwikiCard(page) {
 
 
 
+                    
+//return company name
+function callback_comp_name(compname) {
+    return compname;
+}
+
 
 //Stock quote
 function stockcard(session,name,pic,ticker,exc) {
     return [ 
         new builder.HeroCard(session)
-        .title( name  + " (" + ticker +")")
-        .subtitle("Exchange: " + exc)
         .images([
             builder.CardImage.create(session, pic)
         ])
+
+,
+
+        new builder.HeroCard(session)
+        .title( name  + " (" + ticker +")")
+        .subtitle("Exchange: " + exc)
+
+        .text("Please choose from the following options for more detailed analysis")
         .buttons([
-            builder.CardAction.imBack(session, 'Details', 'Details')
+            builder.CardAction.openUrl(session, 'http://www.cnbc.com/quotes/?symbol=' + ticker, 'Stock Performance'),
+            builder.CardAction.postBack(session, '1', 'See supporting news articles'),
+            builder.CardAction.postBack(session, '2', 'See trending most mentioned topics'),
+            builder.CardAction.postBack(session, '3', 'See co-mentioned companies'),
+            builder.CardAction.postBack(session, '4', 'Show Market Sentiment statistics')
     
         ])
         
@@ -293,16 +370,53 @@ function stockcard(session,name,pic,ticker,exc) {
 }
 
 
-//create Array
-function Create2DArray(rows) {
-  var arr = [];
 
-  for (var i=0;i<rows;i++) {
-     arr[i] = [];
-  }
-
-  return arr;
+//Newscard
+function news_card(title,url,media) {
+    return new builder.HeroCard()
+        .title(title)
+        .subtitle("Source: "+media)
+        .buttons([
+            new builder.CardAction.openUrl()
+                                    .title('Read this source')
+                                    .value(url)
+        ]);
 }
+
+//Newscard
+function entities_card(title,url,media) {
+    return new builder.ThumbnailCard()
+        .title(title)
+        .subtitle("Matching Results: "+ media)
+}
+
+
+function getDate() {
+
+    var date = new Date();
+
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+
+    var year = date.getFullYear();
+
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+
+    return year + month + day;
+
+}
+
+
 
 
 //find interaction of Array
@@ -436,7 +550,7 @@ function greetingcard(session) {
         //     builder.CardImage.create(session, 'https://s13.postimg.org/4dpbpu87r/icons_proj3-01.jpg')
         // ])
         .buttons([
-            builder.CardAction.imBack(session, 'How is AAPL?', 'How is XXX?')
+            builder.CardAction.imBack(session, 'How is Apple', 'How is XXX?')
     
         ])
         ,

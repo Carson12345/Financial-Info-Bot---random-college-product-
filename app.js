@@ -249,7 +249,18 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                     } else {
                                         session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say the market sentiment towards' +learner_des_ID + ' is quite neutral. '+ neupert + "% of the internet comments are negative! WHile"+lowerpert+"% of those are positive"), session.message.text;
                                     }
-                                        session.send('Hope the info helps! Ask me about another company!', session.message.text);
+                                            var cards = new Array();
+                                            for (var l = 0; l < body.results.length; l++) {
+                                                cards.push(news_card(body.results[l].title,body.results[l].url,body.results[l].host));
+                                            }
+                                            const reply = new builder.Message()
+                                                                        .address(session.message.address)
+                                                                        .text('These are some sources that make up the ' + body.aggregations[4].results[0].key + ' sentiment towards ' + learner_des_ID)
+                                                                        .attachmentLayout(builder.AttachmentLayout.carousel)
+                                                                        .attachments(cards);
+                                            bot.send(reply);
+                                            session.send('Hope the info helps! Ask me about another company!', session.message.text);    
+
                                     }
                                 
 

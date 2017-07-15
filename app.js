@@ -371,7 +371,7 @@ function stockcard(session,name,pic,ticker,exc) {
         .title( name  + " (" + ticker +")")
         .subtitle("Exchange: " + exc)
 
-        .text("Please choose from the following options for more detailed analysis")
+        .text("We have analysed the online articles and commentary towards " + name + " in the past 7 days. Please choose from the following options for the analysis results")
         .buttons([
             builder.CardAction.postBack(session, '4', 'Show Market Sentiment statistics'),
             builder.CardAction.postBack(session, '1', 'See supporting news articles'),

@@ -242,11 +242,9 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                     case "4":
                                     if ((body.aggregations[4].results[0].key == "positive") && higherpert > 50) {
                                         session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say ' + learner_des_ID + ' is doing quite well! '+ higherpert + "% of the internet comments are positive! While "+lowerpert+"% of those are negative"), session.message.text;
-                                    } else if ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
+                                    } else ((body.aggregations[4].results[0].key == "negative") && higherpert > 50) {
                                         session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say ' + learner_des_ID + ' is not doing really well. '+ higherpert + "% of the internet comments are negative! While "+lowerpert+"% of those are negative"), session.message.text;
-                                    } else {
-                                        session.send('We in total conducted sentiment analysis on ' + body.matching_results + ' sources online, we will say the market sentiment towards ' +learner_des_ID + ' is quite neutral. '+ neupert + "% of the internet comments are negative! While"+lowerpert+"% of those are positive"), session.message.text;
-                                    }
+                                    } 
                                             var cards5 = new Array();
                                             for (var l = 0; l < body.results.length; l++) {
                                                 cards5.push(news_card(body.results[l].title,body.results[l].url,body.results[l].host));
@@ -335,18 +333,6 @@ var downloadpic = function(uri, filename, callback){
 //
 const arrayColumn = (arr, n) => arr.map(x => x[n]);
 
-//wikians
-function constructwikiCard(page) {
-                        return new builder.HeroCard()
-                            .title(page.title)
-                            .subtitle(page.extract.substr(0, 600).trim()+'...')
-                            .buttons([
-                                new builder.CardAction()
-                                    .title('More about this definition')
-                                    .type('openUrl')
-                                    .value("https://en.wikipedia.org/?curid=" + page.pageid)
-                            ]);
-                    }
 
 
 
@@ -458,56 +444,6 @@ function intersect_arr(a, b)
 
 
 
-
-
-//pplcard
-function pplcard(session) {
-    return [ 
-        new builder.HeroCard(session)
-        .title('Net change in account balance: $2325.7 ')
-        .subtitle('You saved $2325.7 this month!')
-        .text('Congrats! You met the saving target for this month and saved $2325.7! Click the following button to see the growth history and the projected growth trend!')
-        .images([
-            builder.CardImage.create(session, 'https://s11.postimg.org/ofc1bi7o3/goal-01.png')
-        ])
-        .buttons([
-            builder.CardAction.imBack(session, 'See wealth growth', 'See wealth growth')
-    
-        ])
-        ,
-
-        new builder.HeroCard(session)
-        .title('Your Total Expenditure this month: ')
-        .subtitle('This report is based on the data collectedfrom 22/5 - 26/5')
-        .text('Click "Expenditure breakdown" to see what did you spend your money on this month!')
-        .images([
-            builder.CardImage.create(session, 'https://s4.postimg.org/tidfqpfy5/pay-01.png')
-        ])
-        // .buttons([
-        //     builder.CardAction.openUrl(session, 'http://www.ifva.com/?p=7620&lang=en', 'Apply Now')
-        // ])
-        .buttons([
-            builder.CardAction.imBack(session, 'Advice on reducing expenditure', 'Advice on reducing expenditure')
-    
-        ])
-        ,
-
-        new builder.HeroCard(session)
-        .title('Your Total Income this month: ')
-        .subtitle('This report is based on the data collectedfrom 22/5 - 26/5')
-        .text('Click "Income breakdown" to see what did you spend your money on this month!')
-        .buttons([
-            builder.CardAction.imBack(session, 'Advice on expanding income sources', 'Advice on expanding income sources')
-    
-        ])
-        .images([
-            builder.CardImage.create(session, 'https://s29.postimg.org/6s0r7rd6v/save-01.png')
-        ])
-        // .buttons([
-        //     builder.CardAction.openUrl(session, 'http://www.ifva.com/?p=7620&lang=en', 'Apply Now')
-        // ])
-    ]
-}
 
 //greeting cards
 function greetingcard(session) {

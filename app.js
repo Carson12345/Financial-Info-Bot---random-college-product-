@@ -153,6 +153,7 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
 
 
                         }, function (session, results, next) {
+                            session.send('loading.....', session.message.text);
                             var company_name = learner_des_ID;
                             var purpose = results.response;
                             console.log(purpose);

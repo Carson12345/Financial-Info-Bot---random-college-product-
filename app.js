@@ -400,7 +400,7 @@ function news_card(title,url,media) {
 }
 
 //Newscard
-function entities_card(title,url,media) {
+function entities_card(title,media) {
     return new builder.ThumbnailCard()
         .title(title)
         .subtitle("Matching Results: "+ media)

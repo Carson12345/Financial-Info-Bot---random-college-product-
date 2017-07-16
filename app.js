@@ -164,16 +164,16 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                                     .attachmentLayout(builder.AttachmentLayout.carousel)
                                     .attachments(cards);
                                 session.send(reply);
-
+                                builder.Prompts.text(session, 'loading...');
                                 } 
                             catch(error) 
                                 {
                                 session.send('Sorry, maybe check the spelling of the company?', session.message.text);
-
+                                
                                 }
                             })
                     
-                            builder.Prompts.text(session, 'loading...');
+                            
 
 
                         }, function (session, results, next) {

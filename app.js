@@ -138,14 +138,14 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
 
                                             var cards = new Array();
                                             for (var l = 0; l < body.results.length; l++) {
-                                                var stock_name = info_stock.ResultSet.Result[0].name;
-                                                var ticker = info_stock.ResultSet.Result[0].symbol;
-                                                var exc_code = info_stock.ResultSet.Result[0].exchDisp;
+                                                var stock_name = info_stock.ResultSet.Result[l].name;
+                                                var ticker = info_stock.ResultSet.Result[l].symbol;
+                                                var exc_code = info_stock.ResultSet.Result[l].exchDisp;
                                                 cards.push(stockcard(session,stock_name,pic,ticker,exc_code));
                                             }
                                             const reply = new builder.Message()
                                                                         .address(session.message.address)
-                                                                        .text('There is a overall ' + body.aggregations[4].results[0].key + ' sentiment towards ' + learner_des_ID + 'Here are some of the supporting sources.')
+                                                                        .text('I think you are looking for these companies. ')
                                                                         .attachmentLayout(builder.AttachmentLayout.carousel)
                                                                         .attachments(cards);
                                             bot.send(reply);

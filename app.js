@@ -129,17 +129,41 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
                             try 
                                 {
                                 console.log(info_stock.ResultSet.Result[0].symbol);
-                                var stock_name = info_stock.ResultSet.Result[0].name;
-                                var ticker = info_stock.ResultSet.Result[0].symbol;
-                                var exc_code = info_stock.ResultSet.Result[0].exchDisp;
-                                var pic = "https://logo.clearbit.com/" + company_name_ID.entity +".com?size=800";
-                                var cards = stockcard(session,stock_name,pic,ticker,exc_code);
+
+
+                                
+
+
+
+
+                                            var cards = new Array();
+                                            for (var l = 0; l < body.results.length; l++) {
+                                                var stock_name = info_stock.ResultSet.Result[0].name;
+                                                var ticker = info_stock.ResultSet.Result[0].symbol;
+                                                var exc_code = info_stock.ResultSet.Result[0].exchDisp;
+                                                cards.push(stockcard(session,stock_name,pic,ticker,exc_code));
+                                            }
+                                            const reply = new builder.Message()
+                                                                        .address(session.message.address)
+                                                                        .text('There is a overall ' + body.aggregations[4].results[0].key + ' sentiment towards ' + learner_des_ID + 'Here are some of the supporting sources.')
+                                                                        .attachmentLayout(builder.AttachmentLayout.carousel)
+                                                                        .attachments(cards);
+                                            bot.send(reply);
+
+
+
+
+                                // var stock_name = info_stock.ResultSet.Result[0].name;
+                                // var ticker = info_stock.ResultSet.Result[0].symbol;
+                                // var exc_code = info_stock.ResultSet.Result[0].exchDisp;
+                                // var pic = "https://logo.clearbit.com/" + company_name_ID.entity +".com?size=800";
+                                // var cards = stockcard(session,stock_name,pic,ticker,exc_code);
                                 // attach the card to the reply message
-                                var reply = new builder.Message(session)
-                                    .text('I think you are looking for this company. ')
-                                    .attachmentLayout(builder.AttachmentLayout.carousel)
-                                    .attachments(cards);
-                                session.send(reply);
+                                // var reply = new builder.Message(session)
+                                //     .text('I think you are looking for this company. ')
+                                //     .attachmentLayout(builder.AttachmentLayout.carousel)
+                                //     .attachments(cards);
+                                // session.send(reply);
 
                                 } 
                             catch(error) 

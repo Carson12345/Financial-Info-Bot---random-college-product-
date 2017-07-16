@@ -136,34 +136,34 @@ bot.dialog('/', new builder.IntentDialog({ recognizers: [recognizer] })
 
 
 
-                                            var cards = new Array();
-                                            for (var l = 0; l < body.results.length; l++) {
-                                                var stock_name = info_stock.ResultSet.Result[l].name;
-                                                var ticker = info_stock.ResultSet.Result[l].symbol;
-                                                var exc_code = info_stock.ResultSet.Result[l].exchDisp;
-                                                cards.push(stockcard(session,stock_name,pic,ticker,exc_code));
-                                            }
-                                            const reply = new builder.Message()
-                                                                        .address(session.message.address)
-                                                                        .text('I think you are looking for these companies. ')
-                                                                        .attachmentLayout(builder.AttachmentLayout.carousel)
-                                                                        .attachments(cards);
-                                            bot.send(reply);
-
-
-
-
-                                // var stock_name = info_stock.ResultSet.Result[0].name;
-                                // var ticker = info_stock.ResultSet.Result[0].symbol;
-                                // var exc_code = info_stock.ResultSet.Result[0].exchDisp;
-                                // var pic = "https://logo.clearbit.com/" + company_name_ID.entity +".com?size=800";
-                                // var cards = stockcard(session,stock_name,pic,ticker,exc_code);
-                                // attach the card to the reply message
-                                // var reply = new builder.Message(session)
+                                //             var cards = new Array();
+                                //             for (var l = 0; l < info_stock.ResultSet.Result.length; l++) {
+                                                
+                                //                 var stock_name = info_stock.ResultSet.Result[l].name;
+                                //                 var ticker = info_stock.ResultSet.Result[l].symbol;
+                                //                 var exc_code = info_stock.ResultSet.Result[l].exchDisp;
+                                //                 cards.push(stockcard(null,stock_name,pic,ticker,exc_code));
+                                //             }
+                                //              var reply = new builder.Message(session)
                                 //     .text('I think you are looking for this company. ')
                                 //     .attachmentLayout(builder.AttachmentLayout.carousel)
                                 //     .attachments(cards);
                                 // session.send(reply);
+
+
+
+
+                                var stock_name = info_stock.ResultSet.Result[0].name;
+                                var ticker = info_stock.ResultSet.Result[0].symbol;
+                                var exc_code = info_stock.ResultSet.Result[0].exchDisp;
+                                var pic = "https://logo.clearbit.com/" + company_name_ID.entity +".com?size=800";
+                                var cards = stockcard(session,stock_name,pic,ticker,exc_code);
+                                // attach the card to the reply message
+                                var reply = new builder.Message(session)
+                                    .text('I think you are looking for this company. ')
+                                    .attachmentLayout(builder.AttachmentLayout.carousel)
+                                    .attachments(cards);
+                                session.send(reply);
 
                                 } 
                             catch(error) 
